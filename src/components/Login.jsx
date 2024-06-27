@@ -1,4 +1,26 @@
+import { getAuth, signInWithPopup } from "firebase/auth";
+import { useEffect, useState } from "react";
+import { app, googleAuthProvider } from "./firebase";
+
+
 const Login = () => {
+    const auth = getAuth(app);
+    const [user, setUser] = useState(null);
+
+    useEffect(() => {
+        const unsub = auth.onAuthStateChanged((maybeUser) => {
+            if (maybeUser != null){
+                return setUser(maybeUser)
+            }
+
+            signInWithPopup(auth, googleAuthProvider)
+                .then(credentials => setUser(credentials.user))
+                .catch(e => console.error(e));
+        });
+
+        return unsub;
+    }, [auth]);
+
     return(
         <section className="w-full h-[100vh] flex items-center justify-center">
             <form className="flex max-w-md w-full gap-y-10 flex-col">
@@ -15,6 +37,7 @@ const Login = () => {
                 <div>
                     <button className="bg-[#4B5563] block w-full py-4 rounded-md">Login</button>
                 </div>
+                {user != null ? user.displayName : <p>Loging...</p>}
             </form>
         </section>
     )
