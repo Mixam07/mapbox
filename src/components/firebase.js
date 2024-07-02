@@ -1,17 +1,21 @@
 import { initializeApp } from "firebase/app";
-import { GoogleAuthProvider } from "firebase/auth";
-
-const API_KEY = "AIzaSyDcdl-7jROMuCSze6ANikjJUoMRBDglBzs";
+import { GoogleAuthProvider, getAuth } from "firebase/auth";
+import { getDatabase } from "firebase/database";
 
 const firebaseConfig = {
-  apiKey: API_KEY,
-  authDomain: "mapbox-8444d.firebaseapp.com",
-  projectId: "mapbox-8444d",
-  storageBucket: "mapbox-8444d.appspot.com",
-  messagingSenderId: "446181864743",
-  appId: "1:446181864743:web:00585a175eec5346e3a502",
-  measurementId: "G-JHN1MNZC4V"
+  apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
+  authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
+  databaseURL: process.env.REACT_APP_FIREBASE_DATABASE_URL,
+  projectId: process.env.RREACT_APP_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.REACT_APP_FIREBASE_STORAGEBUCKET,
+  messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.REACT_APP_FIREBASE_APP_ID,
+  measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENT_ID
 };
 
-export const app = initializeApp(firebaseConfig);
-export const googleAuthProvider = new GoogleAuthProvider();
+const app = initializeApp(firebaseConfig);
+const googleAuthProvider = new GoogleAuthProvider();
+const auth = getAuth(app);
+const db = getDatabase(app);
+
+export { app, googleAuthProvider, auth, db }

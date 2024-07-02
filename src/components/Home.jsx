@@ -1,29 +1,46 @@
 import Map, { Marker } from 'react-map-gl';
-import points from "../points.json";
-
-const token = "pk.eyJ1Ijoic3BoaW5jdGVyIiwiYSI6ImNseHdhNDhnYTBudzYycnF6OWlkdnllcHcifQ.95ouJZjAGy2wsXqQMOwHZg";
+import { useEffect, useState } from 'react';
+import { get, ref } from 'firebase/database';
+import { db } from './firebase';
 
 const Home = () => {
+    const [points, setPoints] = useState([]);
+    const points_list = points.map((item, i) => {
+        return(
+            <Marker
+                key={i}
+                longitude={item.location.longitude}
+                latitude={item.location.latitude}
+                anchor="bottom"
+            >
+            <div style={{ color: '#E3B35F' }}>⬤</div>
+            </Marker>
+        )
+    });
+
+    const fetchData = async () => {
+        const dbRef = ref(db, 'celebreties');
+        const snapshot = await get(dbRef);
+
+        if (snapshot.exists()) {
+            setPoints(Object.values(snapshot.val()));
+        }
+    }
+
+    useEffect(() => {
+        fetchData();
+    }, []);
+
     return(
         <div style={{width: "100vw", height: "100vh"}}>
             <Map
-                mapboxAccessToken={token}
+                mapboxAccessToken={process.env.REACT_APP_MAPBOX_API_KEY}
                 style={{width: "100%", height: "100%"}}
-                mapStyle="mapbox://styles/sphincter/clxx0dkc400y601pfgzvcf0xh"
+                mapStyle="mapbox://styles/mapbox/light-v11"
                 projection="mercator"
                 dragRotate={false}
             >
-            {points.map((marker, index) => (
-                <Marker
-                    key={index}
-                    longitude={marker.longitude}
-                    latitude={marker.latitude}
-                    anchor="bottom"
-                    maxZoom={10}
-                >
-                <div style={{ color: '#E3B35F' }}>⬤</div>
-                </Marker>
-            ))}
+                {points_list}
             </Map>
         </div>
     )
