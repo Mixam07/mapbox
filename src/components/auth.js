@@ -12,9 +12,7 @@ const onSignInWithEmailAndPassword = (email, password, otherData) => {
                 ...userCredential.user
             }, otherData)
         })
-        .catch(e => {
-            console.error(e);
-        });
+        .catch(e => console.error(e));
 }
 
 const onCreateUserWithEmailAndPassword = (email, password, otherData) => {
@@ -24,20 +22,18 @@ const onCreateUserWithEmailAndPassword = (email, password, otherData) => {
                 ...userCredential.user
             }, otherData)
         })
-        .catch(e => {
-            console.error(e);
-        })
+        .catch(e => console.error(e));
 }
 
 const onGoogleAuthProvider = async (e) => {
     e.preventDefault();
 
     auth.onAuthStateChanged((maybeUser) => {
-        console.log(maybeUser);
         if (maybeUser != null) return 
 
         signInWithPopup(auth, googleAuthProvider)
             .then(credentials => saveData({...credentials.user}))
+            .catch(e => console.error(e));
     });
 }
 

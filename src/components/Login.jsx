@@ -4,7 +4,7 @@ import { Navigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { checkIsEmptyEmail, onCreateUserWithEmailAndPassword, onGoogleAuthProvider, onSignInWithEmailAndPassword } from "./auth";
 
-const Login = () => {
+const Login = (props) => {
     const [user, setUser] = useState(null);
 
     useEffect(() => {
@@ -36,12 +36,12 @@ const Login = () => {
                 onSignInWithEmailAndPassword(...dataForLogin);
             }
 
-            //resetForm();
+            resetForm();
         },
     });
 
     return(
-        <section className="w-full h-[100vh] flex items-center justify-center">
+        <section className="w-full h-[100vh] flex items-center justify-center pt-16">
             <form onSubmit={formik.handleSubmit} className="flex max-w-md w-full gap-y-5 flex-col">
                 <div className="w-full">
                     <p className="text-sm mb-2">First name</p>
