@@ -1,6 +1,6 @@
 const Directory = (props) => {
     return(
-        <section className="pt-16">Directory</section>
+        <section>Directory</section>
     )
 }
 

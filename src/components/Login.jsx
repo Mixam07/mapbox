@@ -1,8 +1,13 @@
 import { auth } from "./firebase";
 import { useFormik } from 'formik';
-import { Navigate } from "react-router-dom";
+import { Navigate, NavLink } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { checkIsEmptyEmail, onCreateUserWithEmailAndPassword, onGoogleAuthProvider, onSignInWithEmailAndPassword } from "./auth";
+import { checkIsEmptyEmail, onGoogleAuthProvider, onSignInWithEmailAndPassword } from "./auth";
+import user_icon from "../assets/icons/user.svg";
+import passport from "../assets/icons/passport.svg";
+import email from "../assets/icons/email.svg";
+import eye from "../assets/icons/eye.svg";
+import google from "../assets/icons/google.svg";
 
 const Login = (props) => {
     const [user, setUser] = useState(null);
@@ -14,70 +19,80 @@ const Login = (props) => {
             setUser(null);
         });
     }, []);
-
     const formik = useFormik({
         initialValues: {
-            first_name: "",
-            last_name: "",
-            username: "",
             email: "",
             password: ""
         },
-        onSubmit: async (values, { resetForm }) => {
-            const dataForLogin = [values.email, values.password, {
-                first_name: values.first_name,
-                last_name: values.last_name,
-                username: values.username
-            }];
+        validate: (values) => {
+            const errors = {};
 
-            if(await checkIsEmptyEmail(values.email)){
-                onCreateUserWithEmailAndPassword(...dataForLogin);
-            }else{
-                onSignInWithEmailAndPassword(...dataForLogin);
+            if(values.email === "" || values.email === " "){
+                errors.email = "The field cannot be empty";
+            }
+            if(values.password === "" || values.password === " "){
+                errors.password = "The field cannot be empty";
             }
 
-            resetForm();
+            return errors
         },
+        onSubmit: async (values, { setErrors, resetForm }) => {
+            const dataForLogin = [values.email, values.password];
+
+            try{
+                await onSignInWithEmailAndPassword(...dataForLogin);
+
+                resetForm();
+            }catch(e){
+                setErrors({
+                    email: "Mail or password is wrong",
+                    password: "Mail or password is wrong"
+                });
+            }
+        }
     });
 
     return(
-        <section className="w-full h-[100vh] flex items-center justify-center pt-16">
-            <form onSubmit={formik.handleSubmit} className="flex max-w-md w-full gap-y-5 flex-col">
-                <div className="w-full">
-                    <p className="text-sm mb-2">First name</p>
-                    <input className="w-full bg-[#374151] text-[#849CA4] px-3 py-2.5 rounded-md border-[1px] border-solid border-[#4B5563]
-                        placeholder:text-[#849CA4]" type="text" placeholder="Enter your first name" id="first_name" name="first_name"
-                        onChange={formik.handleChange} value={formik.values.first_name} />
-                </div>
-                <div className="w-full">
-                    <p className="text-sm mb-2">Last name</p>
-                    <input className="w-full bg-[#374151] text-[#849CA4] px-3 py-2.5 rounded-md border-[1px] border-solid border-[#4B5563]
-                        placeholder:text-[#849CA4]" type="text" placeholder="Enter your last name" id="last_name" name="last_name"
-                        onChange={formik.handleChange} value={formik.values.last_name} />
-                </div>
-                <div className="w-full">
-                    <p className="text-sm mb-2">Username</p>
-                    <input className="w-full bg-[#374151] text-[#849CA4] px-3 py-2.5 rounded-md border-[1px] border-solid border-[#4B5563]
-                        placeholder:text-[#849CA4]" type="text" placeholder="Enter your username" id="username" name="username"
-                        onChange={formik.handleChange} value={formik.values.username} />
-                </div>
-                <div className="w-full">
-                    <p className="text-sm mb-2">Email</p>
-                    <input className="w-full bg-[#374151] text-[#849CA4] px-3 py-2.5 rounded-md border-[1px] border-solid border-[#4B5563]
-                        placeholder:text-[#849CA4]" type="email" placeholder="Enter your email" id="email" name="email"
-                        onChange={formik.handleChange} value={formik.values.email} />
-                </div>
-                <div className="w-full">
-                    <p className="text-sm mb-2">Password</p>
-                    <input className="w-full bg-[#374151] text-[#849CA4] px-3 py-2.5 rounded-md border-[1px] border-solid border-[#4B5563]
-                        placeholder:text-[#849CA4]" type="password" placeholder="****************" id="password" name="password"
-                        onChange={formik.handleChange} value={formik.values.password} />
-                </div>
-                <div className="flex flex-col gap-y-3">
-                    <button type="submit" className=" text-white bg-[#4B5563] block w-full py-4 rounded-md">Login</button>
-                    <button onClick={onGoogleAuthProvider} className=" text-white bg-[#4B5563] block w-full py-4 rounded-md">Login google</button>
-                </div>
-            </form>
+        <section className="w-full h-[calc(100vh-5.75rem)] flex items-center justify-center">
+            <div className="max-w-lg w-full">
+                <h1 className="mb-12 uppercase text-300 font-bold text-5xl">Login in account.</h1>
+                <form onSubmit={formik.handleSubmit} className="flex w-full gap-y-4 flex-col">
+                    <div className="w-full">
+                        <div className="w-full relative">
+                            <p className="absolute top-4 left-6 text-xs uppercase">Email</p>
+                            <input className={`w-full bg-gradient-to-l from-500 to-500/75 rounded-2xl text-200 font-bold pt-10 pr-14 pb-4 pl-6
+                                placeholder:text-200/60 border-[1px] border-solid ${formik.errors.email? "border-600": "border-600/0"}`} type="email"
+                                placeholder="Enter your email" id="email" name="email" onChange={formik.handleChange} value={formik.values.email} />
+                            <img className="absolute top-2/4 right-6 translate-y-[-50%] w-6" src={email} alt="email" />
+                        </div>
+                        {formik.errors.email ? <div className="text-600 mt-1">{formik.errors.email}</div> : null}
+                    </div>
+                    <div>
+                        <div className="w-full relative">
+                            <p className="absolute top-4 left-6 text-xs uppercase">Password</p>
+                            <input className={`w-full bg-gradient-to-l from-500 to-500/75 rounded-2xl text-200 font-bold pt-10 pr-14 pb-4 pl-6 border-[1px]
+                                placeholder:text-200/60] border-solid ${formik.errors.password? "border-600": "border-600/0"}`} type="password" id="password"
+                                placeholder="****************" name="password" onChange={formik.handleChange} value={formik.values.password} />
+                            <img className="absolute top-2/4 right-6 translate-y-[-50%] w-6" src={eye} alt="eye" />
+                        </div>
+                        {formik.errors.password ? <div className="text-600 mt-1">{formik.errors.password}</div> : null}
+                    </div>
+                    <div className="flex flex-col gap-y-3">
+                        <button type="submit" className="p-7 bg-300 text-white rounded-2xl uppercase font-bold">
+                            Login
+                        </button>
+                        <button onClick={onGoogleAuthProvider} className="p-5 bg-300 text-white rounded-2xl uppercase font-bold
+                            flex justify-center items-center gap-x-4">
+                            <img className="w-8" src={google} alt="google" />
+                            Login with google
+                        </button>
+                    </div>
+                </form>
+                <p className="mt-4 text-center uppercase">
+                    Have not had an account yet?
+                    <NavLink className="text-300 font-bold ml-2" to="/register">Register</NavLink>
+                </p>
+            </div>
             {user && <Navigate to="/"/>}
         </section>
     )

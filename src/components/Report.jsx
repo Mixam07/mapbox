@@ -1,6 +1,6 @@
 const Report = (props) => {
     return(
-        <section className="pt-16">Report</section>
+        <section>Report</section>
     )
 }
 

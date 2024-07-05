@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { get, ref } from 'firebase/database';
 import { db } from './firebase';
 import { NavLink } from 'react-router-dom';
+import Filter from './Filter';
 
 const Home = (props) => {
     const [points, setPoints] = useState([]);
@@ -15,16 +16,21 @@ const Home = (props) => {
                 latitude={item.location.latitude}
                 anchor="bottom"
             >
-                <button onClick={ (e) => {toggleInfo(e, i)} } style={{ color: '#E3B35F' }}>⬤</button>
-                <div className={`absolute bottom-0 left-2/4 translate-x-[-50%] translate-y-full bg-100 p-1 rounded-lg
-                    border-[1px] border-solid border-300 ${!item.isShow && "opacity-0"}`}>
-                    <div className='whitespace-nowrap'>First name: {item.first_name}</div>
-                    <div className='whitespace-nowrap'>Last name: {item.last_name}</div>
-                    <div className='whitespace-nowrap'>Country: {item.country}</div>
-                    <div className='whitespace-nowrap'>City: {item.city}</div>
-                    <div className='whitespace-nowrap'>Last update: {item.last_update}</div>
-                    <button className="uppercase block whitespace-nowrap">CHECK THE DATA</button>
-                    <NavLink to={"/profile/" + item.id} className="uppercase block whitespace-nowrap">go to profile</NavLink>
+                <button onClick={ (e) => {toggleInfo(e, i)} } className="relative w-4 h-4 block bg-300 rounded-full before:content-['']
+                    before:absolute before:block before:top-2/4 before:left-2/4 before:w-[150%] before:h-[150%] before:bg-300/10
+                    before:z-[-1] before:translate-x-[-50%] before:translate-y-[-50%] before:rounded-full before:shadow-2xl"></button>
+                <div className={`absolute bottom-2/4 right-[-0.5rem] translate-y-full translate-x-full bg-300/20 py-2 px-4 rounded-r-2xl rounded-b-2xl
+                    border-[1px] border-solid border-white ${!item.isShow && "opacity-0"}`}>
+                    <div className='whitespace-nowrap text-lg mb-2'>First name: {item.first_name}</div>
+                    <div className='whitespace-nowrap text-lg mb-2'>Last name: {item.last_name}</div>
+                    <div className='whitespace-nowrap text-lg mb-2'>Country: {item.country}</div>
+                    <div className='whitespace-nowrap text-lg mb-2'>City: {item.city}</div>
+                    <div className='whitespace-nowrap text-lg mb-2'>Last update: {item.last_update}</div>
+                    <div className='whitespace-nowrap text-lg mb-3'>Accuracy: 60%</div>
+                    <NavLink to={"/profile/" + item.id} className="uppercase whitespace-nowrap text-300 text-lg relative
+                        before:content-[''] before:block before:absolute before:bottom-0 before:left-0 before:w-full before:h-[1px] before:bg-300">
+                        Check details
+                    </NavLink>
                 </div>
             </Marker>
         )
@@ -32,7 +38,7 @@ const Home = (props) => {
 
     const toggleInfo = (e, i) => {
         e.preventDefault();
-        console.log(e.clientY);
+        console.log(i);
 
         setPoints([
             ...points.map((point, j) => {
@@ -80,13 +86,18 @@ const Home = (props) => {
 
     useEffect(() => {
         fetchData();
+
+        return () => {
+            props.setIsMapActive(true);
+        }
     }, []);
 
     return(
-        <div style={{width: "100vw", height: "100vh"}} onClick={onClick}>
+        <div className="h-[calc(100vh-5.75rem)] w-[100vw] relative" onClick={onClick}>
+            <Filter setPoints={setPoints} />
             <Map
                 mapboxAccessToken={process.env.REACT_APP_MAPBOX_API_KEY}
-                style={{width: "100%", height: "100%"}}
+                className="h-full w-full"
                 mapStyle="mapbox://styles/mapbox/light-v11"
                 projection="mercator"
                 dragRotate={false}

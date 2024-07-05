@@ -1,6 +1,6 @@
 const Ranking = (props) => {
     return(
-        <section className="pt-16">Ranking</section>
+        <section>Ranking</section>
     )
 }
 

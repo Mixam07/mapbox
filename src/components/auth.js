@@ -5,24 +5,24 @@ import { get, push, ref, set } from "firebase/database";
 const dbRef = ref(db, 'users');
 const snapshot = await get(dbRef);
 
-const onSignInWithEmailAndPassword = (email, password, otherData) => {
-    signInWithEmailAndPassword(auth, email, password)
+const onSignInWithEmailAndPassword = async (email, password, otherData, error) => {
+    await signInWithEmailAndPassword(auth, email, password)
         .then(async userCredential => {
             await saveData({
                 ...userCredential.user
             }, otherData)
         })
-        .catch(e => console.error(e));
+        .catch(e => { throw new Error(e.message) });
 }
 
-const onCreateUserWithEmailAndPassword = (email, password, otherData) => {
-    createUserWithEmailAndPassword(auth, email, password)
+const onCreateUserWithEmailAndPassword = async (email, password, otherData) => {
+    await createUserWithEmailAndPassword(auth, email, password)
         .then(async userCredential => {
             await saveData({
                 ...userCredential.user
             }, otherData)
         })
-        .catch(e => console.error(e));
+        .catch(e => { throw new Error(e.message) });
 }
 
 const onGoogleAuthProvider = async (e) => {
@@ -66,9 +66,9 @@ const checkIsUserCreated = async (user) => {
 
 const saveData = async (user, otherData) => {
     const key = await checkIsUserCreated(user);
-    const dbRef = key? ref(db, 'users/'+key): push(dbRef);
+    const newDbRef = key? ref(db, 'users/'+key): push(dbRef);
 
-    await set(dbRef, {
+    await set(newDbRef, {
         ...otherData,
         uid: user.uid,
         username: user.displayName != null ? user.displayName : otherData.username,
