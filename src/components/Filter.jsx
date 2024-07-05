@@ -102,6 +102,7 @@ const Filter = (props) => {
             </button>
             <div className={`absolute bottom-[-0.5rem] left-0 translate-y-full bg-400 border-[1px] border-solid border-300 p-4 rounded-2xl
                 flex flex-col gap-y-4 duration-500 ${isActive? "opacity-1 pointer-events-auto": "opacity-0 pointer-events-none"}`}>
+                {/*
                 <div>
                     <div className="relative mb-2 min-w-52">
                         <input className="w-full bg-gradient-to-l from-500/75 to-500/50 py-1.5 pl-4 pr-10 rounded-3xl placeholder:text-200/60"
@@ -114,6 +115,7 @@ const Filter = (props) => {
                         {list_search_tags}
                     </ul>
                 </div>
+                */}
                 <div>
                     <div className="relative mb-2 min-w-52">
                         <input className="w-full bg-gradient-to-l from-500/75 to-500/50 py-1.5 pl-4 pr-10 rounded-3xl placeholder:text-200/60"
