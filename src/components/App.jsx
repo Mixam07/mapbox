@@ -12,23 +12,27 @@ import { useState } from 'react';
 import Register from './Register';
 
 const App = (props) => {
+    const [searchCelebrety, setSearchCelebrety] = useState("");
+    const [isFocus, setIsFocus] = useState(false);
     const [isMapActive, setIsMapActive] = useState(true);
     return (
         <>
             <Routes>
-                <Route path="/" element={<Header isMapActive={isMapActive} setIsMapActive={setIsMapActive} isHomePage={true} />} />
+                <Route path="/" element={<Header isMapActive={isMapActive} setIsMapActive={setIsMapActive} isHomePage={true}
+                    searchCelebrety={searchCelebrety} setSearchCelebrety={setSearchCelebrety} setIsFocus={setIsFocus} />} />
                 <Route path="*" element={<Header />} />
             </Routes>
             <main className="pt-[5.75rem]">
                 <Routes>
-                    <Route path="/" element={<Home setIsMapActive={setIsMapActive} />} />
+                    <Route path="/" element={<Home setIsMapActive={setIsMapActive} searchCelebrety={searchCelebrety}
+                        setSearchCelebrety={setSearchCelebrety} isFocus={isFocus} setIsFocus={setIsFocus} />} />
                     <Route path="/directory" element={<Directory />} />
                     <Route path="/report" element={<Report />} />
                     <Route path="/ranking" element={<Ranking />} />
                     <Route path="/about" element={<About />} />
                     <Route path="/login" element={<Login />} />
                     <Route path="/register" element={<Register />} />
-                    <Route path="/profile" element={<Profile />} />
+                    <Route path="/profile/:userId" element={<Profile />} />
                     <Route path="*" element={<Page404 />} />
                 </Routes>
             </main>
