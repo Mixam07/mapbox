@@ -40,24 +40,26 @@ const Home = (props) => {
         )
     });
     const users = searchCelebretyList.map((item, i) => (
-        <li key={i+1} className="border-solid border-t-[1px] border-[#E1E2ED] py-6 flex items-center">
-            <div className="w-full flex gap-x-4 items-center">
-                <img className="w-12 h-12 rounded-full object-cover" src={item.photo} alt="photo" />
-                <p className="uppercase font-semibold">{item.first_name} {item.last_name}</p>
-            </div>
-            <div className="w-full flex justify-center gap-x-14">
-                <p>{item.country}</p>
-                <p>{item.city}</p>
-            </div>
-            <ul className="w-full flex justify-end gap-x-4">
-                {item.tags.map((tag, i) => {
-                    if(i < 3){
-                        return(
-                            <li className="py-1.5 px-3 bg-gradient-to-l from-500 to-500/75 rounded-2xl min-w-24 text-center">#{tag}</li>
-                        )
-                    }
-                })}
-            </ul>
+        <li key={i+1} className="border-solid border-t-[1px] border-[#E1E2ED] py-6">
+            <NavLink to={`/profile/${item.id}`} className="flex items-center">
+                <div className="w-full flex gap-x-4 items-center">
+                    <img className="w-12 h-12 rounded-full object-cover" src={item.photo} alt="photo" />
+                    <p className="uppercase font-semibold">{item.first_name} {item.last_name}</p>
+                </div>
+                <div className="w-full flex justify-center gap-x-14">
+                    <p>{item.country}</p>
+                    <p>{item.city}</p>
+                </div>
+                <ul className="w-full flex justify-end gap-x-4">
+                    {item.tags.map((tag, i) => {
+                        if(i < 3){
+                            return(
+                                <li className="py-1.5 px-3 bg-gradient-to-l from-500 to-500/75 rounded-2xl min-w-24 text-center">#{tag}</li>
+                            )
+                        }
+                    })}
+                </ul>
+            </NavLink>
         </li>
     ));
 
@@ -109,8 +111,10 @@ const Home = (props) => {
         }
     }
 
-    const onBlur = () => {
-        props.setIsFocus(false);
+    const closeInput = (e) => {
+        if(e.target.classList.contains("canvas")){
+            props.setIsFocus(false);
+        }
     }
 
     const onChange = (e) => {
@@ -170,13 +174,13 @@ const Home = (props) => {
                     {points_list}
                 </Map>
             </section>
-            <div className={`fixed top-0 left-0 z-[1000] w-full h-full bg-black/75 flex justify-center items-center duration-500
-                ${!props.isFocus && "opacity-0 pointer-events-none"}`}>
+            <div onClick={closeInput} className={`canvas fixed top-0 left-0 z-[1000] w-full h-full bg-black/75 flex justify-center items-center
+                duration-500 ${!props.isFocus && "opacity-0 pointer-events-none"}`}>
                 <div className="max-w-7xl w-full">
                     <div className="bg-gradient-to-l from-500 to-500/75 p-3 rounded-xl w-full">
                         <div className="relative">
                             <input className={`w-full py-6 pr-16 pl-10 ${users.length === 0? "rounded-xl": "rounded-t-xl"} uppercase font-semibold text-2xls`}
-                                placeholder="Find a celebrety" type="text" value={props.searchCelebrety} onBlur={onBlur}
+                                placeholder="Find a celebrety" type="text" value={props.searchCelebrety}
                                 onChange={onChange} ref={inputRef} />
                             <button className="absolute bottom-2/4 right-[2.5rem] translate-y-2/4">
                                 <img src={search} alt="search" />

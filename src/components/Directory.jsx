@@ -9,24 +9,26 @@ const Directory = (props) => {
     const [celebreties, setCelebreties] = useState([]);
     const [searchCelebretyList, setSearchCelebretyList] = useState([]);
     const users = searchCelebretyList.map((item, i) => (
-        <li key={i+1} className="border-solid border-t-[1px] border-[#E1E2ED] py-6 flex items-center">
-            <div className="w-full flex gap-x-4 items-center">
-                <img className="w-12 h-12 rounded-full object-cover" src={item.photo} alt="photo" />
-                <p className="uppercase font-semibold">{item.first_name} {item.last_name}</p>
-            </div>
-            <div className="w-full flex justify-center gap-x-14">
-                <p>{item.country}</p>
-                <p>{item.city}</p>
-            </div>
-            <ul className="w-full flex justify-end gap-x-4">
-                {item.tags.map((tag, i) => {
-                    if(i < 3){
-                        return(
-                            <li className="py-1.5 px-3 bg-gradient-to-l from-500 to-500/75 rounded-2xl min-w-24 text-center">#{tag}</li>
-                        )
-                    }
-                })}
-            </ul>
+        <li key={i+1} className="border-solid border-t-[1px] border-[#E1E2ED] py-6">
+            <NavLink to={`/profile/${item.id}`} className="flex items-center">
+                <div className="w-full flex gap-x-4 items-center">
+                    <img className="w-12 h-12 rounded-full object-cover" src={item.photo} alt="photo" />
+                    <p className="uppercase font-semibold">{item.first_name} {item.last_name}</p>
+                </div>
+                <div className="w-full flex justify-center gap-x-14">
+                    <p>{item.country}</p>
+                    <p>{item.city}</p>
+                </div>
+                <ul className="w-full flex justify-end gap-x-4">
+                    {item.tags.map((tag, i) => {
+                        if(i < 3){
+                            return(
+                                <li className="py-1.5 px-3 bg-gradient-to-l from-500 to-500/75 rounded-2xl min-w-24 text-center">#{tag}</li>
+                            )
+                        }
+                    })}
+                </ul>
+            </NavLink>
         </li>
     ));
 
