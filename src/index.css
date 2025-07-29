@@ -52,6 +52,40 @@ body{
     border-radius: 1rem;
     background-color: theme("colors.400");
 }
+
+.gender:checked ~ label .circle{
+    background-color: #4B2D9F;
+}
+
+input.date::-webkit-calendar-picker-indicator {
+    display: block;
+    background: url("./assets/icons/calendar.svg") 0 0/contain no-repeat;
+    width: 16px;
+    height: 16px;
+    border-width: thin;
+}
+
+input.time::-webkit-calendar-picker-indicator {
+    display: block;
+    background: url("./assets/icons/clock.svg") 0 0/contain no-repeat;
+    width: 16px;
+    height: 16px;
+    border-width: thin;
+}
+
+select{
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url("./assets/icons/arrow_circle.svg");
+    background-repeat: no-repeat;
+    background-position: calc(100% - 10px) 50%;
+    background-size: 20px 20px;
+}
+
+select::-ms-expand {
+    display: none;
+}
   
 /* if backdrop support: very transparent and blurred */
 @supports ((-webkit-backdrop-filter: none) or (backdrop-filter: none)) {

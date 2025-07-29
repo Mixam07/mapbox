@@ -10,7 +10,8 @@ module.exports = {
         400: "#FAFBFD",
         500: "#A6A9C8",
         600: "#EA2416",
-        700: "#DDDFEB"
+        700: "#DDDFEB",
+        800: "#D8796D"
       }
     },
   },
